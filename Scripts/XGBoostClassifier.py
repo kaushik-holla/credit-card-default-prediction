@@ -7,9 +7,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import f1_score, make_scorer
 from xgboost import XGBClassifier
 import joblib
+import os
 
 # Reading the data
-file_path = '../Data/train(1).csv'
+file_path = 'Data/train(1).csv'
 df = pd.read_csv(file_path)
 
 # Converting the predictor variable to binary values (1 for 'yes', 0 for 'no')
@@ -21,6 +22,8 @@ y = df['default_oct']
 
 ########### Define the preprocessing pipeline ###########
 # This pipeline includes KNN imputation for missing values and standard scaling for feature normalization
+X.drop('customer_id', axis=1, inplace=True)  # Drop 'customer_id' column if present
+
 preprocessor = Pipeline(steps=[
     ('imputer', KNNImputer(n_neighbors=5)),
     ('scaler', StandardScaler())
@@ -71,5 +74,5 @@ final_pipeline = Pipeline(steps=[
 ])
 
 # Save the final pipeline to a file
-pipeline_path = '../Model/XGBoostClassifier_pipeline.joblib'  # Replace with the desired path to save the pipeline
+pipeline_path = 'Model/XGBoostClassifier_pipeline.joblib'  # Replace with the desired path to save the pipeline
 joblib.dump(final_pipeline, pipeline_path)
